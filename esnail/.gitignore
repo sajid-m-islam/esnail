@@ -1,0 +1,24 @@
+.python-version
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Build/test artifacts
+.pytest_cache/
+dist/
+build/
+
+interpolated_data.csv
