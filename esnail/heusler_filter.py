@@ -91,10 +91,7 @@ def is_x2yz(formula_str, tolerance=0.04):
     except Exception:
         return False
 
-def main():
-    input_file = 'interpolated_data.csv'
-    output_file = 'x2yz_compounds.csv'
-    
+def main(input_file, output_file):
     print(f"Loading data from {input_file}...")
     try:
         df = pd.read_csv(input_file)
@@ -158,4 +155,5 @@ def main():
             print(f"- {col}: {valid_count} valid rows")
 
 if __name__ == "__main__":
-    main()
+    # Run the main function
+    main(input_file='interpolated_data.csv', output_file='starry_data_compounds.csv')
