@@ -178,4 +178,5 @@ if __name__ == "__main__":
     output_filename = "heusler_with_features_dataset.csv"
     df.to_csv(output_filename, index=False)
     print(f"\nSaved {df.shape[1]} total columns to '{output_filename}'.")
+    print(f"Shape of dataset: {df.shape}")
 
