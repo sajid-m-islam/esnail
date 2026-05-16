@@ -68,16 +68,11 @@ if __name__ == "__main__":
         "MendeleevNumber",  # Chemical similarity sorting (Crucial for thermoelectrics)
         "Electronegativity",# Bond polarity / electron scattering
         "MeltingT",         # Thermodynamic stability / Bond strength
-        "CovalentRadius",   # Atomic packing density
         "SpaceGroupNumber", # Symmetry breaking
         "NsUnfilled",       # s-band scattering / electron mobility
         "NpUnfilled",       # p-band scattering (crucial for Z-site main group)
         "NdUnfilled",       # d-band scattering (crucial for X/Y transition metals)
         "NfUnfilled",       # f-band scattering (crucial if rare-earth dopants are used!)
-        "NsValence",        # s-orbital characteristics
-        "NpValence",        # p-orbital characteristics
-        "NdValence",        # d-orbital characteristics
-        "NfValence",        # f-orbital characteristics 
         "NValence"          # Total valence electrons (overall charge fluctuations)
     ]
 
