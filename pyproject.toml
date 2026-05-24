@@ -8,4 +8,5 @@ dependencies = [
     "matminer>=0.10.1",
     "pandas>=2.3.3",
     "pymatgen>=2026.3.23",
+    "xgboost>=3.2.0",
 ]
