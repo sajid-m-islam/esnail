@@ -114,7 +114,7 @@ def split_heusler_sites(formula_str):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("combined_full_heusler_dataset.csv")
+    df = pd.read_csv("./data/combined_full_heusler_dataset.csv")
 
     # Handle any fractional formulas
     df['Composition'] = df['Composition'].apply(fix_fractional_formulas)
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     
     # Save new dataset
     output_filename = "heusler_with_features_dataset.csv"
-    df.to_csv(output_filename, index=False)
+    # df.to_csv(output_filename, index=False)
     print(f"\nSaved {df.shape[1]} total columns to '{output_filename}'.")
     print(f"Shape of dataset: {df.shape}")
 
