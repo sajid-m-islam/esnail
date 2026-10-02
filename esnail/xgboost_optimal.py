@@ -8,12 +8,12 @@ from sklearn.metrics import r2_score, mean_squared_error
 
 
 # Setup
-df = pd.read_csv("./data/heusler_reduced_features_NEW.csv")
+df = pd.read_csv("./data/reduced_features_v1.csv")
 
 target_col = 'Seebeck Coefficient'
 
 cols_to_drop = ['Composition', 'Site_X', 'Site_Y', 'Site_Z', 
-                'Seebeck Coefficient', 'Electrical Resistivity']
+                'Seebeck Coefficient']
 
 X = df.drop(columns=cols_to_drop)
 y = df[target_col]
@@ -30,13 +30,13 @@ X_test_scaled = scaler.transform(X_test)
 # Random forest with found optimal hyperparameter values
 xgb_reg = xgb.XGBRegressor(
     objective='reg:squarederror',
-    n_estimators=100,
-    max_depth=7,             
-    learning_rate=0.04,
-    gamma=5,
-    min_child_weight=5,      
-    subsample=0.85,          
-    colsample_bytree=0.6,    
+    n_estimators=201,
+    max_depth=10,             
+    learning_rate=0.02588887645789802,
+    gamma=0.7556741452432281,
+    min_child_weight=1,      
+    subsample=0.7506457892353051,          
+    colsample_bytree=0.7601989025296874,    
     random_state=42, 
     n_jobs=-1
 )

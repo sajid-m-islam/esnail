@@ -1,20 +1,21 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, GridSearchCV
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score, mean_squared_error
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
+import optuna
 
 
 
 # Setup
-df = pd.read_csv("./data/heusler_reduced_features_NEW.csv")
+df = pd.read_csv("./data/reduced_features_v1.csv")
 
 target_col = 'Seebeck Coefficient'
 
 cols_to_drop = ['Composition', 'Site_X', 'Site_Y', 'Site_Z', 
-                'Seebeck Coefficient', 'Electrical Resistivity']
+                'Seebeck Coefficient']
 
 X = df.drop(columns=cols_to_drop)
 y = df[target_col]
@@ -28,25 +29,29 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Define hyperparameter grid
-param_grid = {
-    'n_estimators': [300],      # Number of trees in the forest
-    'max_depth': [10, 12, 15, 20],       # Maximum depth of the tree
-    'min_samples_split': [4, 5, 6],       # Min samples required to split a node
-    'min_samples_leaf': [1, 2],          # Min samples required at each leaf
-    'max_features': [1.0, 0.8],         # How much of each feature to use
-    'bootstrap': [True],
-    'max_samples': [0.75, 0.90, None]    # How much data to use
-}
+# Define hyperparameter search space and Optuna objective
+def objective(trial):
+    params = {
+        'n_estimators': trial.suggest_int('n_estimators', 100, 500),      # Number of trees in the forest
+        'max_depth': trial.suggest_int('max_depth', 10, 20),             # Maximum depth of the tree
+        'min_samples_split': trial.suggest_int('min_samples_split', 4, 6),   # Min samples required to split a node
+        'min_samples_leaf': trial.suggest_int('min_samples_leaf', 1, 2),     # Min samples required at each leaf
+        'max_features': trial.suggest_float('max_features', 0.8, 1.0),       # How much of each feature to use
+        'bootstrap': True,
+        'max_samples': trial.suggest_float('max_samples', 0.75, 1.0)         # How much data to use
+    }
+    rf = RandomForestRegressor(random_state=42, n_jobs=-1, **params)
+    scores = cross_val_score(rf, X_train_scaled, y_train, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
+    return scores.mean()
 
-rf = RandomForestRegressor(random_state=42)
-rf_grid = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, verbose=2, n_jobs=-1,scoring='neg_mean_squared_error')
+study = optuna.create_study(direction='maximize', sampler=optuna.samplers.TPESampler(seed=42))
+study.optimize(objective, n_trials=100)
 
-rf_grid.fit(X_train_scaled, y_train)
+best_rf = RandomForestRegressor(random_state=42, n_jobs=-1, bootstrap=True, **study.best_params)
+best_rf.fit(X_train_scaled, y_train)
 
-best_rf = rf_grid.best_estimator_
 print("\nTuning Complete. The optimal parameters found are:")
-for param, value in rf_grid.best_params_.items():
+for param, value in study.best_params.items():
     print(f"   -> {param}: {value}")
     
 print("\nEvaluating the Tuned Model on the hidden Test Set")

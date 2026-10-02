@@ -14,7 +14,7 @@ def reduce_features(df, output):
 
     # Assign target and features, drop all non-numerical data
     target = "Seebeck Coefficient"
-    cols_to_drop = ["Composition", "Site_X", "Site_Y", "Site_Z", "Seebeck Coefficient", "Electrical Resistivity"]
+    cols_to_drop = ["Composition", "Site_X", "Site_Y", "Site_Z", "Seebeck Coefficient"]
 
     X = df.drop(columns=cols_to_drop)
     y = df[target]
@@ -46,18 +46,18 @@ def reduce_features(df, output):
     plt.tight_layout()
     plt.show()
 
-    # Get top 40 features
-    top_features = feature_importance_df["Feature"][:40].tolist()
+    # Get top 20 features
+    top_features = feature_importance_df["Feature"][:20].tolist()
 
     # Create new dataframe with reduced features and save in csv
-    final_cols = ["Composition", "Site_X", "Site_Y", "Site_Z"] + top_features + ["Seebeck Coefficient", "Electrical Resistivity"]
+    final_cols = ["Composition", "Site_X", "Site_Y", "Site_Z"] + top_features + ["Seebeck Coefficient"]
 
     df_reduced = df[final_cols]
     df_reduced.to_csv(output, index=False)
 
     print("\n" + "="*40)
     print(f"Dimensionality Reduction Complete")
-    print(f"Reduced from {X.shape[1]} features down to 40.")
+    print(f"Reduced from {X.shape[1]} features down to 20.")
     print("="*40)
         
     print("\nTop 5 absolute best predictors:")
@@ -65,4 +65,4 @@ def reduce_features(df, output):
 
 if __name__ == "__main__":
     df = pd.read_csv("./data/heusler_expanded_variance.csv")
-    reduce_features(df, "./data/heusler_reduced_features_NEW.csv")
+    reduce_features(df, "./data/reduced_features_v1.csv")
