@@ -50,7 +50,7 @@ new_r2 = r2_score(y_test, predictions)
 new_rmse = np.sqrt(mean_squared_error(y_test, predictions))
 
 print("\n" + "="*50)
-print(f"Tuned Random Forest Model Results")
+print(f"Tuned XGBoost Results")
 print(f"   R2 Score: {new_r2:.4f}")
 print(f"   RMSE:     {new_rmse:.4f} μV/K")
 print("="*50)
